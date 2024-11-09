@@ -15,6 +15,7 @@ class _AddStudentState extends State<AddStudent> {
   final GlobalKey<FormState> stuFormKey =GlobalKey();
   var idcontroller=TextEditingController();
   var namecontroller=TextEditingController();
+  var nicknamecontroller=TextEditingController();
   var classcontroller=TextEditingController();
   var agecontroller=TextEditingController();
   var phncontroller=TextEditingController();
@@ -34,6 +35,7 @@ class _AddStudentState extends State<AddStudent> {
     final newStudent=Student(
       id: idcontroller.text,
       name: namecontroller.text,
+      nickName: nicknamecontroller.text,
       clas: int.parse(classcontroller.text),
       age: int.parse(agecontroller.text),
       phnNumber: phncontroller.text,
@@ -99,7 +101,7 @@ print("in");
                   controller: namecontroller,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                    labelText: 'Enter Your Name',
+                    labelText: 'Enter Your Full Name',
                     prefixIcon: Icon(Icons.abc),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -116,7 +118,31 @@ print("in");
                       }
                     return null;
                   },
-                ),  // name
+                ),  // full name
+                SizedBox(height: 20),
+
+                TextFormField(
+                  controller: nicknamecontroller,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    labelText: 'Enter Your Nick Name',
+                    prefixIcon: Icon(Icons.co_present),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.black54),
+                    ),
+                  ),
+                  validator: (String? value){
+                    if(value==null)
+                    {
+                      return "Please Enter Your Age";
+                    }
+                    return null;
+                  },
+                ),  // nick name
                 SizedBox(height: 20),
 
                 TextFormField(

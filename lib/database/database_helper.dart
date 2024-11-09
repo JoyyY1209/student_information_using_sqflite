@@ -13,6 +13,7 @@ class DatabaseHelper{
   //column name
   static const colId ='id';
   static const colName = 'name';
+  static const colNickName = 'nickName';
   static const colClass= 'clas';
   static const colAge = 'age';
   static const colPhn = 'phnNumber';
@@ -45,6 +46,7 @@ class DatabaseHelper{
       CREATE TABLE $tableStudent(
       $colId TEXT PRIMARY KEY,
       $colName TEXT NOT NULL,
+      $colNickName TEXT NOT NULL,
       $colClass INTEGER NOT NULL,
       $colAge INTEGER NOT NULL,
       $colPhn TEXT NOT NULL,

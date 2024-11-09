@@ -75,7 +75,7 @@ class _ListOfStudentsState extends State<ListOfStudents> {
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>UpdateStudent(student: student,)));
                   //goto update page
               },
-              title: Text(student.name!,style: TextStyle(fontWeight: FontWeight.bold),),
+              title: Text(student.nickName!,style: TextStyle(fontWeight: FontWeight.bold),),
               subtitle: Text(student.id!),
               leading: Icon(Icons.account_circle_outlined,size: 40,),
               trailing: IconButton(

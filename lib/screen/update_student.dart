@@ -17,6 +17,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
   final GlobalKey<FormState> stuFormKey =GlobalKey();
   var idcontroller=TextEditingController();
   var namecontroller=TextEditingController();
+  var nicknamecontroller=TextEditingController();
   var classcontroller=TextEditingController();
   var agecontroller=TextEditingController();
   var phncontroller=TextEditingController();
@@ -32,6 +33,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
     final updateStudents=Student(
       id: idcontroller.text,
       name: namecontroller.text,
+      nickName: nicknamecontroller.text,
       clas: int.parse(classcontroller.text),
       age: int.parse(agecontroller.text),
       phnNumber: phncontroller.text,
@@ -60,6 +62,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
 
     idcontroller.text=widget.student.id;
     namecontroller.text=widget.student.name;
+    nicknamecontroller.text=widget.student.nickName;
     classcontroller.text=widget.student.clas.toString();   // jehetu model r database e int akare store ase
     agecontroller.text=widget.student.age.toString();      //// jehetu model r database e int akare store ase
     phncontroller.text=widget.student.phnNumber;
@@ -82,6 +85,35 @@ class _UpdateStudentState extends State<UpdateStudent> {
             padding: EdgeInsets.all(30),
             child: Column(
               children: [
+                Opacity(
+                  opacity: 0.6,
+                  child: TextFormField(
+                    controller: idcontroller,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    readOnly: true,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      labelText: 'Your ID',
+                      prefixIcon: Icon(Icons.perm_identity_outlined),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Colors.black54),
+                      ),
+                    ),
+                    validator: (String? value){
+                      if(value==null)
+                      {
+                        return "Please Enter Your ID";
+                      }
+                      return null;
+                    },
+                  ),
+                ),  // id
+                SizedBox(height: 20),
+
                 TextFormField(
                   controller: namecontroller,
                   keyboardType: TextInputType.text,
@@ -103,7 +135,55 @@ class _UpdateStudentState extends State<UpdateStudent> {
                     }
                     return null;
                   },
-                ),  // name
+                ),  // full name
+                SizedBox(height: 20),
+
+                TextFormField(
+                  controller: nicknamecontroller,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    labelText: 'Enter Your Nick Name',
+                    prefixIcon: Icon(Icons.co_present),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.black54),
+                    ),
+                  ),
+                  validator: (String? value){
+                    if(value==null)
+                    {
+                      return "Please Enter Your Age";
+                    }
+                    return null;
+                  },
+                ),  // nick name
+                SizedBox(height: 20),
+
+                TextFormField(
+                  controller: classcontroller,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'Enter Your Class',
+                    prefixIcon: Icon(Icons.clear_all_sharp),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.black54),
+                    ),
+                  ),
+                  validator: (String? value){
+                    if(value==null)
+                    {
+                      return "Please Enter Your Class";
+                    }
+                    return null;
+                  },
+                ),  // class
                 SizedBox(height: 20),
 
                 TextFormField(
@@ -132,7 +212,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
 
                 TextFormField(
                   controller: phncontroller,
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                     labelText: 'Enter Your Phone Number',
                     prefixIcon: Icon(Icons.phone_sharp),
