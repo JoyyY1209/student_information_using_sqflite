@@ -13,6 +13,7 @@ class DatabaseHelper{
   //column name
   static const colId ='id';
   static const colName = 'name';
+  static const colClass= 'clas';
   static const colAge = 'age';
   static const colPhn = 'phnNumber';
   static const colEmail ='email';
@@ -41,9 +42,10 @@ class DatabaseHelper{
   Future createTables(Database db,int version) async{
     await db.execute(
       """
-      CREATE TABLES $tableStudent(
-      $colId INTEGER PRIMARY KEY,
+      CREATE TABLE $tableStudent(
+      $colId TEXT PRIMARY KEY,
       $colName TEXT NOT NULL,
+      $colClass INTEGER NOT NULL,
       $colAge INTEGER NOT NULL,
       $colPhn TEXT NOT NULL,
       $colEmail TEXT NOT NULL,
@@ -52,6 +54,37 @@ class DatabaseHelper{
       )
       """
     );
+  }
+
+  Future<List<Map<String,dynamic>>> getAllData() async{
+    Database? db = await instance.database;
+    return await db!.query(tableStudent,orderBy: "$colId DESC");
+
+    // Use rawQuery to select all notes
+    // List<Map<String, dynamic>> notes = await db!.rawQuery('SELECT * FROM notes');
+
+    //return notes;
+
+  }
+
+  Future<int> insertData(Map<String,dynamic> map)async{
+    Database? db = await instance.database;
+    return await db!.insert(tableStudent, map);
+  }
+
+  Future<int> updateData(Map<String,dynamic> map,String id)async{
+    Database? db =await instance.database;
+    return await db!.update(tableStudent, map,where: '$colId = ?',whereArgs: [id]);
+
+    // await db.rawQuery(
+    //     'SELECT * FROM notes WHERE userId = ?',
+    //     [userId]);
+
+  }
+
+  Future<int> deleteData(String id)async{
+    Database? db = await instance.database;
+    return await db!.delete(tableStudent,where: '$colId = ?',whereArgs: [id]);
   }
 
 }

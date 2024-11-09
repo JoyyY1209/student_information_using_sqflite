@@ -1,23 +1,74 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:student_information_using_sqflite/database/database_helper.dart';
+import 'package:student_information_using_sqflite/screen/list_of_students.dart';
+import 'package:student_information_using_sqflite/model/student.dart';
 class UpdateStudent extends StatefulWidget {
-  const UpdateStudent({super.key});
+  final student;
+  const UpdateStudent({super.key,required this.student});
 
   @override
   State<UpdateStudent> createState() => _UpdateStudentState();
 }
 
 class _UpdateStudentState extends State<UpdateStudent> {
+  late DatabaseHelper dbHelper;
   final GlobalKey<FormState> stuFormKey =GlobalKey();
+  var idcontroller=TextEditingController();
   var namecontroller=TextEditingController();
   var classcontroller=TextEditingController();
   var agecontroller=TextEditingController();
   var phncontroller=TextEditingController();
   var emailcontroller=TextEditingController();
   var locationcontroller=TextEditingController();
-
   String genderSelect="Male";
+  String? id;
+
 
   var _gender = ['Male','Female'];
+
+  Future updateStudent(String id)async{
+    final updateStudents=Student(
+      id: idcontroller.text,
+      name: namecontroller.text,
+      clas: int.parse(classcontroller.text),
+      age: int.parse(agecontroller.text),
+      phnNumber: phncontroller.text,
+      email: emailcontroller.text,
+      location: locationcontroller.text,
+      gender: genderSelect,
+    );
+    
+    int result = await dbHelper.updateData(updateStudents.toMap(), id);
+
+    if(result!=0)
+      {
+        Get.snackbar("Updated", "Student Infomation Updated",snackPosition: SnackPosition.BOTTOM);
+        Get.offAll(ListOfStudents());
+      }
+    else
+      Get.snackbar("Eror", "Eror In Student Information Update",snackPosition: SnackPosition.BOTTOM);
+
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    dbHelper=DatabaseHelper.instance;
+
+    idcontroller.text=widget.student.id;
+    namecontroller.text=widget.student.name;
+    classcontroller.text=widget.student.clas.toString();   // jehetu model r database e int akare store ase
+    agecontroller.text=widget.student.age.toString();      //// jehetu model r database e int akare store ase
+    phncontroller.text=widget.student.phnNumber;
+    emailcontroller.text=widget.student.email;
+    locationcontroller.text=widget.student.location;
+    genderSelect=widget.student.gender;
+
+    id=widget.student.id;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +97,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
                     ),
                   ),
                   validator: (String? value){
-                    if(value!=null)
+                    if(value==null)
                     {
                       return "Please Enter Your Age";
                     }
@@ -70,7 +121,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
                     ),
                   ),
                   validator: (String? value){
-                    if(value!=null)
+                    if(value==null)
                     {
                       return "Please Enter Your Age";
                     }
@@ -94,7 +145,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
                     ),
                   ),
                   validator: (String? value){
-                    if(value!=null)
+                    if(value==null)
                     {
                       return "Please Enter Your Phone Number";
                     }
@@ -118,7 +169,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
                     ),
                   ),
                   validator: (String? value){
-                    if(value!=null)
+                    if(value==null)
                     {
                       return "Please Enter Your Email";
                     }
@@ -142,7 +193,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
                     ),
                   ),
                   validator: (String? value){
-                    if(value!=null)
+                    if(value==null)
                     {
                       return "Please Enter Your Location";
                     }
@@ -208,8 +259,14 @@ class _UpdateStudentState extends State<UpdateStudent> {
                         borderRadius: BorderRadius.circular(15),
                       ),
                     ),
-                    onPressed: (){},
-                    child: Text("Add",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),))
+                    onPressed: (){
+                      if(stuFormKey.currentState!.validate())
+                        {
+                          stuFormKey.currentState!.save();
+                          updateStudent(id!);
+                        }
+                    },
+                    child: Text("Update",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),))
 
               ],
             ),

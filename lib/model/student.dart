@@ -1,6 +1,7 @@
 class Student{
   String? id;
   String? name;
+  int? clas;
   int? age;
   String? phnNumber;
   String? email;
@@ -10,6 +11,7 @@ class Student{
 Student({
   this.id,
   this.name,
+  this.clas,
   this.age,
   this.phnNumber,
   this.email,
@@ -19,7 +21,9 @@ Student({
 
 Map<String,dynamic> toMap(){
   return{
+    'id' : id,
     'name' : name,
+    'clas': clas,
     'age' : age,
     'phnNumber' : phnNumber,
     'email' : email,
@@ -32,6 +36,7 @@ static Student fromMap(Map<String,dynamic> map){
   return Student(
     id : map['id'],
     name:map['name'],
+    clas: map['clas'],
     age: map['age'],
     phnNumber: map['phnNumber'],
     email: map['email'],

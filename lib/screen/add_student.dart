@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:student_information_using_sqflite/database/database_helper.dart';
+import 'package:student_information_using_sqflite/model/student.dart';
+import 'package:student_information_using_sqflite/screen/list_of_students.dart';
 class AddStudent extends StatefulWidget {
   const AddStudent({super.key});
 
@@ -8,14 +13,49 @@ class AddStudent extends StatefulWidget {
 
 class _AddStudentState extends State<AddStudent> {
   final GlobalKey<FormState> stuFormKey =GlobalKey();
+  var idcontroller=TextEditingController();
   var namecontroller=TextEditingController();
   var classcontroller=TextEditingController();
   var agecontroller=TextEditingController();
   var phncontroller=TextEditingController();
   var emailcontroller=TextEditingController();
   var locationcontroller=TextEditingController();
-
   String genderSelect="Male";
+
+  late DatabaseHelper dbHelper;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    dbHelper=DatabaseHelper.instance;
+  }
+
+  Future addStudent()async{
+    final newStudent=Student(
+      id: idcontroller.text,
+      name: namecontroller.text,
+      clas: int.parse(classcontroller.text),
+      age: int.parse(agecontroller.text),
+      phnNumber: phncontroller.text,
+      email: emailcontroller.text,
+      location: locationcontroller.text,
+      gender: genderSelect,
+    );
+    print(genderSelect);
+    
+    int result = await dbHelper.insertData(newStudent.toMap());
+    if(result!=0)
+    {
+
+print("in");
+      Get.snackbar("Success", "Student Information Added",snackPosition: SnackPosition.BOTTOM);
+      Get.offAll(ListOfStudents());
+    }
+    else
+      Get.snackbar("Error", "Error in adding Student Information",snackPosition: SnackPosition.BOTTOM);
+  }
+
+
 
   var _gender = ['Male','Female'];
   @override
@@ -32,6 +72,30 @@ class _AddStudentState extends State<AddStudent> {
             child: Column(
               children: [
                 TextFormField(
+                  controller: idcontroller,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    labelText: 'Enter Your ID',
+                    prefixIcon: Icon(Icons.perm_identity_outlined),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.black54),
+                    ),
+                  ),
+                  validator: (String? value){
+                    if(value==null)
+                    {
+                      return "Please Enter Your ID";
+                    }
+                    return null;
+                  },
+                ),  // id
+                SizedBox(height: 20),
+
+                TextFormField(
                   controller: namecontroller,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
@@ -46,13 +110,37 @@ class _AddStudentState extends State<AddStudent> {
                     ),
                   ),
                   validator: (String? value){
-                    if(value!=null)
+                    if(value==null)
                       {
                         return "Please Enter Your Age";
                       }
                     return null;
                   },
                 ),  // name
+                SizedBox(height: 20),
+
+                TextFormField(
+                  controller: classcontroller,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'Enter Your Class',
+                    prefixIcon: Icon(Icons.clear_all_sharp),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.black54),
+                    ),
+                  ),
+                  validator: (String? value){
+                    if(value==null)
+                    {
+                      return "Please Enter Your Class";
+                    }
+                    return null;
+                  },
+                ),  // class
                 SizedBox(height: 20),
 
                 TextFormField(
@@ -70,7 +158,7 @@ class _AddStudentState extends State<AddStudent> {
                     ),
                   ),
                   validator: (String? value){
-                    if(value!=null)
+                    if(value==null)
                     {
                       return "Please Enter Your Age";
                     }
@@ -81,7 +169,7 @@ class _AddStudentState extends State<AddStudent> {
 
                 TextFormField(
                   controller: phncontroller,
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                     labelText: 'Enter Your Phone Number',
                     prefixIcon: Icon(Icons.phone_sharp),
@@ -94,7 +182,7 @@ class _AddStudentState extends State<AddStudent> {
                     ),
                   ),
                   validator: (String? value){
-                    if(value!=null)
+                    if(value==null)
                     {
                       return "Please Enter Your Phone Number";
                     }
@@ -118,7 +206,7 @@ class _AddStudentState extends State<AddStudent> {
                     ),
                   ),
                   validator: (String? value){
-                    if(value!=null)
+                    if(value==null)
                     {
                       return "Please Enter Your Email";
                     }
@@ -142,7 +230,7 @@ class _AddStudentState extends State<AddStudent> {
                     ),
                   ),
                   validator: (String? value){
-                    if(value!=null)
+                    if(value==null)
                     {
                       return "Please Enter Your Location";
                     }
@@ -208,7 +296,13 @@ class _AddStudentState extends State<AddStudent> {
                         borderRadius: BorderRadius.circular(15),
                       ),
                     ),
-                    onPressed: (){},
+                    onPressed: ()async{
+                      if(stuFormKey.currentState!.validate())
+                        {
+                          stuFormKey.currentState!.save();
+                          addStudent();
+                        }
+                    },
                     child: Text("Add",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),))
 
               ],
