@@ -1,6 +1,8 @@
 # student_information_using_sqflite
 
-A new Flutter project.
+## Interface
+[Interface Video](https://drive.google.com/file/d/1M0feAY4D4gqUF6hTerfwpkG1tu-onzdO/view?usp=drive_link)
+![screenshot](assets/images/s_i.png)
 
 ## Getting Started
 
